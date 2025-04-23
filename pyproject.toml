@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Python utilities for Myanmar language processing"
 readme = "README.md"
 requires-python = ">=3.7"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
     {name = "Pyae Sone Myo"}
 ]
@@ -27,5 +27,11 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/Rickaym/langmm"
-"Bug Tracker" = "https://github.com/Rickaym/langmm/issues"
+"Homepage" = "https://github.com/Rickaym/pymyanlp"
+"Bug Tracker" = "https://github.com/Rickaym/pymyanlp/issues"
+
+[tool.setuptools.packages.find]
+include = ["pymyanlp*"]
+
+[tool.setuptools.package-data]
+pymyanlp = ["lib/myword/models/bigram-word.bin", "lib/myword/models/unigram-word.bin", "lib/mypos/models/v3_train1.nopipe.DICT", "lib/mypos/models/v3_train1.nopipe.RDR"]
