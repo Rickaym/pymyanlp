@@ -1,9 +1,9 @@
 def is_burmese(text: str):
     """
-    Check if a single character belongs to the Myanmar Unicode block (U+1000-U+109F).
+    Check if all of the characters in the text belongs to the Myanmar Unicode block (U+1000-U+109F) or a space character.
 
     Args:
-        char (str): A single character to check
+        text (str): A string to check
 
     Returns:
         bool: True if the character is in the Myanmar Unicode block, False otherwise
@@ -11,7 +11,7 @@ def is_burmese(text: str):
     if not isinstance(text, str) or len(text) < 1:
         return False
 
-    return all(0x1000 <= ord(char) <= 0x109F for char in text)
+    return all(0x1000 <= ord(char) <= 0x109F or char == " " for char in text)
 
 
 def get_burmese_script(char):
