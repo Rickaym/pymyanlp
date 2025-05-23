@@ -15,8 +15,6 @@ from pSCRDRtagger.RDRPOSTagger import (
 
 from SCRDRlearner.SCRDRTree import Node, FWObject, getConcreteValue, getCondition
 
-sys.modules["os"] = os
-
 
 class InMemoryRDRPOSTagger(RDRPOSTagger):
     def tagRawCorpus(self, DICT, rawCorpusPath):
