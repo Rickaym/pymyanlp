@@ -1,3 +1,6 @@
+from typing import Literal
+
+
 def is_burmese(text: str):
     """
     Check if all of the characters in the text belongs to the Myanmar Unicode block (U+1000-U+109F) or a space character.
@@ -79,3 +82,75 @@ def get_burmese_script(char):
 
     else:
         return "unknown"
+
+
+def fix_medial(text, position: Literal["before", "after"] = "before"):
+    """
+    Rearrange Myanmar text by moving dependent consonant medial signs (ya, ra, ကျ, ကြ) before or after their base characters.
+
+    In Myanmar script, medial consonant signs (like ya and ra) typically follow their base
+    consonants in Unicode representation, but sometimes this is skewed and needs to be
+    fixed for proper rendering.
+
+    This function identifies and reorders these signs to match the correct visual order.
+
+    Args:
+        text (str): Myanmar text to rearrange
+        position (Literal["before", "after"]): Whether to place dependent signs before or after base characters.
+            Defaults to "before" for proper visual rendering.
+
+    Returns:
+        str: Text with medial consonant signs moved to the specified position relative to base characters
+
+    Example:
+        >>> fix_medial("ကျ")
+        >>> "ျက"
+        >>> fix_medial("ကျ", position="after")
+        >>> "ကျ"
+    """
+    if not text:
+        return text
+
+    dependent_consonant_signs = {
+        0x103B,  # MYANMAR CONSONANT SIGN MEDIAL YA
+        0x103C,  # MYANMAR CONSONANT SIGN MEDIAL RA
+    }
+
+    result = []
+    i = 0
+
+    while i < len(text):
+        current_char = text[i]
+        current_code = ord(current_char)
+
+        if is_burmese(current_char) and current_code not in dependent_consonant_signs:
+            dependent_chars = []
+            j = i + 1
+
+            while j < len(text):
+                next_char = text[j]
+                next_code = ord(next_char)
+
+                if is_burmese(next_char) and next_code in dependent_consonant_signs:
+                    dependent_chars.append(next_char)
+                    j += 1
+                else:
+                    break
+
+            if position == "before":
+                # Add dependent symbols first, then base character
+                result.extend(dependent_chars)
+                result.append(current_char)
+            else:  # position == "after"
+                # Add base character first, then dependent symbols
+                result.append(current_char)
+                result.extend(dependent_chars)
+
+            # Move index past the processed characters
+            i = j
+        else:
+            # For non-base characters or characters already in correct position
+            result.append(current_char)
+            i += 1
+
+    return "".join(result)
