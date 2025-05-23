@@ -1,20 +1,10 @@
 import sys
-
-sys.path.append("./pymyanlp/lib/mypos/RDRPOSTagger")
-
 import os
 
-
-class CustomOS:
-    def __getattr__(self, name):
-        if name == "chdir":
-            return lambda *args, **kwargs: None  # Override chdir to do nothing
-        else:
-            return getattr(os, name)
-
-
-# block chdir calls on the os
-sys.modules["os"] = CustomOS()
+# Ensures relative imports to work without chdir :)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
 
 from multiprocessing import Pool
 from Utility.Config import NUMBER_OF_PROCESSES
@@ -22,7 +12,6 @@ from pSCRDRtagger.RDRPOSTagger import (
     RDRPOSTagger,
     unwrap_self_RDRPOSTagger,
 )
-
 
 from SCRDRlearner.SCRDRTree import Node, FWObject, getConcreteValue, getCondition
 

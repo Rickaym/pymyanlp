@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import os
 import sys
-os.chdir("../")
+
 sys.setrecursionlimit(100000)
-sys.path.append(os.path.abspath(""))
-os.chdir("./pSCRDRtagger")
 
 from multiprocessing import Pool
 from SCRDRlearner.Object import FWObject, getWordTag
@@ -21,7 +18,7 @@ class ExtRDRPOSTagger(SCRDRTree):
         self.root = None
 
     def tagInitializedSentence(self, initSen):
-        wordTags = initSen.replace("“", "''").replace("”", "''").replace("\"", "''").split()
+        wordTags = initSen.replace(""", "''").replace(""", "''").replace("\"", "''").split()
         sen = []
         for i in range(len(wordTags)):
             fwObject = FWObject.getFWObject(wordTags, i)

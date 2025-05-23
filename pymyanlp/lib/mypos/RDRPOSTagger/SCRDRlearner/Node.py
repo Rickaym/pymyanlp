@@ -1,11 +1,21 @@
 # -*- coding: utf-8 -*-
 
+
 class Node:
     """
     A class to represent the nodes in SCRDR tree
     """
 
-    def __init__(self, condition, conclusion, father = None, exceptChild = None, elseChild = None, cornerstoneCases = [], depth = 0):
+    def __init__(
+        self,
+        condition,
+        conclusion,
+        father=None,
+        exceptChild=None,
+        elseChild=None,
+        cornerstoneCases=[],
+        depth=0,
+    ):
         self.condition = condition
         self.conclusion = conclusion
         self.exceptChild = exceptChild
@@ -56,7 +66,7 @@ class Node:
         fatherNode = self.findRealFather()
         for object in fatherNode.cornerstoneCases:
             if node.satisfied(object):
-                print ("The new rule fires the cornerstone cases of its father node!!!")
+                print("The new rule fires the cornerstone cases of its father node!!!")
                 self.findRealFather().cornerstoneCases.remove(object)
         self.elseChild = node
         return True
@@ -64,7 +74,7 @@ class Node:
     def addExceptChild(self, node):
         for object in self.cornerstoneCases:
             if node.satisfied(object):
-                print ("The new rule fires the cornerstone cases of its father node!!!")
+                print("The new rule fires the cornerstone cases of its father node!!!")
                 self.cornerstoneCases.remove(object)
         self.exceptChild = node
         return True
@@ -86,6 +96,7 @@ class Node:
             self.exceptChild.writeToFile(out, depth + 1)
         if self.elseChild != None:
             self.elseChild.writeToFile(out, depth)
+
 
 def tabStr(length):
     return "".join(["\t"] * length)

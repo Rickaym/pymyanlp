@@ -4,18 +4,19 @@ from . import Node
 from .Object import getObjectDictionary
 from .SCRDRTree import SCRDRTree
 
-#Generate concrete rules based on input object of 5-word window context object
+
+# Generate concrete rules based on input object of 5-word window context object
 def generateRules(object):
     # 1. Current word
-    rule1 = "object.word == \"" + object.word + "\""
+    rule1 = 'object.word == "' + object.word + '"'
     # 2. Next 1st word
-    rule2 = "object.nextWord1 == \"" + object.nextWord1 + "\""
+    rule2 = 'object.nextWord1 == "' + object.nextWord1 + '"'
     # 3. Next 2nd word
-    rule3 = "object.nextWord2 == \"" + object.nextWord2 + "\""
+    rule3 = 'object.nextWord2 == "' + object.nextWord2 + '"'
     # 4. Previous 1st word
-    rule4 = "object.prevWord1 == \"" + object.prevWord1 + "\""
+    rule4 = 'object.prevWord1 == "' + object.prevWord1 + '"'
     # 5. Previous 2nd word
-    rule5 = "object.prevWord2 == \"" + object.prevWord2 + "\""
+    rule5 = 'object.prevWord2 == "' + object.prevWord2 + '"'
 
     # 6. Current word and next 1st word
     rule6 = rule1 + " and " + rule2
@@ -24,9 +25,9 @@ def generateRules(object):
     # 11. Previous 1st word and next 1st word
     rule11 = rule4 + " and " + rule2
     # 29. Next 1st word and next 2nd word
-    #rule29 = rule2 + " and " + rule3
+    # rule29 = rule2 + " and " + rule3
     # 30. Previous 2nd word and previous 1st word
-    #rule30 = rule5 + " and " + rule4
+    # rule30 = rule5 + " and " + rule4
     # 19. Current word and next 2nd word
     rule19 = rule1 + " and " + rule3
     # 20. Previous 2nd word and current word
@@ -39,15 +40,14 @@ def generateRules(object):
     # 10. Previous 1st word, current word and next 1st word
     rule10 = rule4 + " and " + rule6
 
-
     # 12. Next 1st tag
-    rule12 = "object.nextTag1 == \"" + object.nextTag1 + "\""
+    rule12 = 'object.nextTag1 == "' + object.nextTag1 + '"'
     # 13. Next 2nd tag
-    rule13 = "object.nextTag2 == \"" + object.nextTag2 + "\""
+    rule13 = 'object.nextTag2 == "' + object.nextTag2 + '"'
     # 14. Previous 1st tag
-    rule14 = "object.prevTag1 == \"" + object.prevTag1 + "\""
+    rule14 = 'object.prevTag1 == "' + object.prevTag1 + '"'
     # 15. Previous 2nd tag
-    rule15 = "object.prevTag2 == \"" + object.prevTag2 + "\""
+    rule15 = 'object.prevTag2 == "' + object.prevTag2 + '"'
     # 16. Next 1st tag and next 2nd tag
     rule16 = rule12 + " and " + rule13
     # 17. Previous 2nd tag and previous 1st tag
@@ -66,11 +66,11 @@ def generateRules(object):
     # 25. 2 previous tags and current word
     rule25 = rule17 + " and " + rule1
     # 26. 2-character suffix
-    rule26 = "object.suffixL2 == \"" + object.suffixL2 + "\""
+    rule26 = 'object.suffixL2 == "' + object.suffixL2 + '"'
     # 27. 3-character suffix
-    rule27 = "object.suffixL3 == \"" + object.suffixL3 + "\""
+    rule27 = 'object.suffixL3 == "' + object.suffixL3 + '"'
     # 28. 4-character suffix
-    rule28 = "object.suffixL4 == \"" + object.suffixL4 + "\""
+    rule28 = 'object.suffixL4 == "' + object.suffixL4 + '"'
 
     rules = []
     rules.append(rule1)
@@ -101,8 +101,8 @@ def generateRules(object):
     rules.append(rule26)
     rules.append(rule27)
     rules.append(rule28)
-    #rules.append(rule29)
-    #rules.append(rule30)
+    # rules.append(rule29)
+    # rules.append(rule30)
 
     rules = set(rules)
     return rules
@@ -120,14 +120,17 @@ def countMatching(objects, ruleNotIn):
             matchedObjects.setdefault(rule, []).append(object)
     return counts, matchedObjects
 
+
 def satisfy(object, rule):
     return eval(rule)
+
 
 def fire(rule, cornerstoneCases):
     for object in cornerstoneCases:
         if satisfy(object, rule):
             return True
     return False
+
 
 def generateRulesFromObjectSet(objects):
     res = []
@@ -136,13 +139,16 @@ def generateRulesFromObjectSet(objects):
         res += rules
     return res
 
+
 class SCRDRTreeLearner(SCRDRTree):
-    def __init__(self, iThreshold = 2, mThreshold = 2):
+    def __init__(self, iThreshold=2, mThreshold=2):
         self.improvedThreshold = iThreshold
         self.matchedThreshold = mThreshold
 
-    #For layer-2 exception structure
-    def findMostImprovingRuleForTag(self, startTag, correctTag, correctCounts, wrongObjects):
+    # For layer-2 exception structure
+    def findMostImprovingRuleForTag(
+        self, startTag, correctTag, correctCounts, wrongObjects
+    ):
         impCounts, affectedObjects = countMatching(wrongObjects, [])
 
         maxImp = -1000000
@@ -170,10 +176,15 @@ class SCRDRTreeLearner(SCRDRTree):
         for tag in objects:
             if tag == startTag:
                 continue
-            if len(objects[tag]) <= maxImp or len(objects[tag]) < self.improvedThreshold:
+            if (
+                len(objects[tag]) <= maxImp
+                or len(objects[tag]) < self.improvedThreshold
+            ):
                 continue
 
-            ruleTemp, imp, affectedObjects = self.findMostImprovingRuleForTag(startTag, correctTag, correctCounts, objects[tag])
+            ruleTemp, imp, affectedObjects = self.findMostImprovingRuleForTag(
+                startTag, correctTag, correctCounts, objects[tag]
+            )
             if imp >= self.improvedThreshold and imp > maxImp:
                 maxImp = imp
                 rule = ruleTemp
@@ -191,7 +202,14 @@ class SCRDRTreeLearner(SCRDRTree):
                             if tag == startTag:
                                 errorRaisingObjects.append(object)
 
-        return rule, correctTag, maxImp, cornerstoneCases, needToCorrectObjects, errorRaisingObjects
+        return (
+            rule,
+            correctTag,
+            maxImp,
+            cornerstoneCases,
+            needToCorrectObjects,
+            errorRaisingObjects,
+        )
 
     def findMostMatchingRule(self, matchingCounts):
         correctTag = ""
@@ -200,7 +218,10 @@ class SCRDRTreeLearner(SCRDRTree):
 
         for tag in matchingCounts:
             for rule in matchingCounts[tag]:
-                if matchingCounts[tag][rule] >= self.matchedThreshold and matchingCounts[tag][rule] > maxCount:
+                if (
+                    matchingCounts[tag][rule] >= self.matchedThreshold
+                    and matchingCounts[tag][rule] > maxCount
+                ):
                     maxCount = matchingCounts[tag][rule]
                     bestRule = rule
                     correctTag = tag
@@ -213,7 +234,9 @@ class SCRDRTreeLearner(SCRDRTree):
         matchingCounts = {}
         matchingObjects = {}
         for tag in objects:
-            matchingCounts[tag], matchingObjects[tag] = countMatching(objects[tag], cornerstoneCaseRules)
+            matchingCounts[tag], matchingObjects[tag] = countMatching(
+                objects[tag], cornerstoneCaseRules
+            )
 
         total = 0
         for tag in objects:
@@ -241,7 +264,14 @@ class SCRDRTreeLearner(SCRDRTree):
                                 continue
                             matchingCounts[tag][rule1] -= 1
 
-            node = Node.Node(rule, "object.conclusion = \"" + correctTag + "\"", currentNode, None, None, cornerstoneCases)
+            node = Node.Node(
+                rule,
+                'object.conclusion = "' + correctTag + '"',
+                currentNode,
+                None,
+                None,
+                cornerstoneCases,
+            )
 
             if not elseChild:
                 currentNode.exceptChild = node
@@ -253,20 +283,30 @@ class SCRDRTreeLearner(SCRDRTree):
             self.buildNodeForObjectSet(needToCorrectObjects, currentNode)
 
     def learnRDRTree(self, initializedCorpus, goldStandardCorpus):
-        self.root = Node.Node("True", "object.conclusion = \"NN\"", None, None, None, [], 0)
+        self.root = Node.Node(
+            "True", 'object.conclusion = "NN"', None, None, None, [], 0
+        )
 
         objects = getObjectDictionary(initializedCorpus, goldStandardCorpus)
 
         currentNode = self.root
         for initializedTag in objects:
-            print ("\n===> Building exception rules for tag %s" % initializedTag)
+            print("\n===> Building exception rules for tag %s" % initializedTag)
             correctCounts = {}
             for object in objects[initializedTag][initializedTag]:
                 rules = generateRules(object)
                 for rule in rules:
                     correctCounts[rule] = correctCounts.setdefault(rule, 0) + 1
 
-            node = Node.Node("object.tag == \"" + initializedTag + "\"", "object.conclusion = \"" + initializedTag + "\"", self.root, None, None, [], 1)
+            node = Node.Node(
+                'object.tag == "' + initializedTag + '"',
+                'object.conclusion = "' + initializedTag + '"',
+                self.root,
+                None,
+                None,
+                [],
+                1,
+            )
 
             if self.root.exceptChild == None:
                 self.root.exceptChild = node
@@ -279,11 +319,26 @@ class SCRDRTreeLearner(SCRDRTree):
             elseChild = False
             currentNode1 = currentNode
             while True:
-                rule, correctTag, imp, cornerstoneCases, needToCorrectObjects, errorRaisingObjects = self.findMostEfficientRule(initializedTag, objectSet, correctCounts)
+                (
+                    rule,
+                    correctTag,
+                    imp,
+                    cornerstoneCases,
+                    needToCorrectObjects,
+                    errorRaisingObjects,
+                ) = self.findMostEfficientRule(initializedTag, objectSet, correctCounts)
                 if imp < self.improvedThreshold:
                     break
 
-                node = Node.Node(rule, "object.conclusion = \"" + correctTag + "\"", currentNode, None, None, cornerstoneCases, 2)
+                node = Node.Node(
+                    rule,
+                    'object.conclusion = "' + correctTag + '"',
+                    currentNode,
+                    None,
+                    None,
+                    cornerstoneCases,
+                    2,
+                )
 
                 if not elseChild:
                     currentNode1.exceptChild = node

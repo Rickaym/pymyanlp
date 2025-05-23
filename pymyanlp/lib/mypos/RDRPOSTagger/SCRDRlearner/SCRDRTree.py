@@ -3,12 +3,13 @@
 from . import Node as Node
 from .Object import FWObject as FWObject
 
+
 class SCRDRTree:
     """
     Single Classification Ripple Down Rules tree for Part-of-Speech and morphological tagging
     """
 
-    def __init__(self, root = None):
+    def __init__(self, root=None):
         self.root = root
 
     def findDepthNode(self, node, depth):
@@ -29,7 +30,7 @@ class SCRDRTree:
         self.root.writeToFile(out, 0)
         out.close()
 
-    #Build tree from file containing rules using FWObject
+    # Build tree from file containing rules using FWObject
     def constructSCRDRtreeFromRDRfile(self, rulesFilePath):
         print(dir(Node))
         self.root = Node.Node(FWObject(False), "NN", None, None, None, [], 0)
@@ -43,7 +44,7 @@ class SCRDRTree:
             line = lines[i]
             depth = 0
             for c in line:
-                if c == '\t':
+                if c == "\t":
                     depth = depth + 1
                 else:
                     break
@@ -79,7 +80,7 @@ class SCRDRTree:
         firedNode = None
         obContext = fwObject.context
         while True:
-            #Check whether object satisfying the current node's condition
+            # Check whether object satisfying the current node's condition
             cnContext = currentNode.condition.context
             notNoneIds = currentNode.condition.notNoneIds
             satisfied = True
@@ -88,7 +89,7 @@ class SCRDRTree:
                     satisfied = False
                     break
 
-            if(satisfied):
+            if satisfied:
                 firedNode = currentNode
                 exChild = currentNode.exceptChild
                 if exChild is None:
@@ -102,6 +103,7 @@ class SCRDRTree:
                 else:
                     currentNode = elChild
         return firedNode
+
 
 #    def findFiredNodeInDepth(self, fwObject, depth):
 #        currentNode = self.root
@@ -140,6 +142,7 @@ class SCRDRTree:
 #            nodeQueue = nodeQueue[1:]
 #        return count
 
+
 def getConcreteValue(str):
     if str.find('""') > 0:
         if str.find("Word") > 0:
@@ -148,7 +151,8 @@ def getConcreteValue(str):
             return "<SFX>"
         else:
             return "<T>"
-    return str[str.find("\"") + 1 : len(str) - 1]
+    return str[str.find('"') + 1 : len(str) - 1]
+
 
 def getCondition(strCondition):
     condition = FWObject(False)
@@ -187,6 +191,7 @@ def getCondition(strCondition):
         if condition.context[i] is not None:
             condition.notNoneIds.append(i)
     return condition
+
 
 if __name__ == "__main__":
     pass

@@ -1,19 +1,22 @@
 # -*- coding: utf-8 -*-
 
+
 class Object:
-    attributes = ["word",
-                  "tag",
-                  "prevWord2",
-                  "prevWord1",
-                  "nextWord1",
-                  "nextWord2",
-                  "prevTag2",
-                  "prevTag1",
-                  "nextTag1",
-                  "nextTag2",
-                  "suffixL2",
-                  "suffixL3",
-                  "suffixL4"]
+    attributes = [
+        "word",
+        "tag",
+        "prevWord2",
+        "prevWord1",
+        "nextWord1",
+        "nextWord2",
+        "prevTag2",
+        "prevTag1",
+        "nextTag1",
+        "nextTag2",
+        "suffixL2",
+        "suffixL3",
+        "suffixL4",
+    ]
     code = "def __init__(self"
     for att in attributes:
         code = code + ", " + att + " = None"
@@ -30,22 +33,24 @@ class Object:
             if not boo:
                 res = res + str(eval("self." + att))
             else:
-                res = res + "\"" + str(eval("self." + att)) + "\""
+                res = res + '"' + str(eval("self." + att)) + '"'
 
             if att != Object.attributes[len(Object.attributes) - 1]:
                 res = res + ","
         res += ")"
         return res
 
+
 def getWordTag(wordTag):
     if wordTag == "///":
         return "/", "/"
     index = wordTag.rfind("/")
     word = wordTag[:index].strip()
-    tag = wordTag[index + 1:].strip()
+    tag = wordTag[index + 1 :].strip()
     return word, tag
 
-def getObject(wordTags, index):#Sequence of "Word/Tag"
+
+def getObject(wordTags, index):  # Sequence of "Word/Tag"
     word, tag = getWordTag(wordTags[index])
     preWord1 = preTag1 = preWord2 = preTag2 = ""
     nextWord1 = nextTag1 = nextWord2 = nextTag2 = ""
@@ -67,7 +72,22 @@ def getObject(wordTags, index):#Sequence of "Word/Tag"
     if index < len(wordTags) - 2:
         nextWord2, nextTag2 = getWordTag(wordTags[index + 2])
 
-    return Object(word, tag, preWord2, preWord1, nextWord1, nextWord2, preTag2, preTag1, nextTag1, nextTag2, suffixL2, suffixL3, suffixL4)
+    return Object(
+        word,
+        tag,
+        preWord2,
+        preWord1,
+        nextWord1,
+        nextWord2,
+        preTag2,
+        preTag1,
+        nextTag1,
+        nextTag2,
+        suffixL2,
+        suffixL3,
+        suffixL4,
+    )
+
 
 def getObjectDictionary(initializedCorpus, goldStandardCorpus):
     goldStandardSens = open(goldStandardCorpus, "r").readlines()
@@ -90,15 +110,21 @@ def getObjectDictionary(initializedCorpus, goldStandardCorpus):
         gold = goldStandardSens[j].strip()
         j += 1
 
-        initWordTags = init.replace("“", "''").replace("”", "''").replace("\"", "''").split()
-        goldWordTags = gold.replace("“", "''").replace("”", "''").replace("\"", "''").split()
+        initWordTags = (
+            init.replace("“", "''").replace("”", "''").replace('"', "''").split()
+        )
+        goldWordTags = (
+            gold.replace("“", "''").replace("”", "''").replace('"', "''").split()
+        )
 
         for k in range(len(initWordTags)):
             initWord, initTag = getWordTag(initWordTags[k])
             goldWord, correctTag = getWordTag(goldWordTags[k])
 
             if initWord != goldWord:
-                print ("\nERROR ==> Raw texts extracted from the gold standard corpus and the initialized corpus are not the same!")
+                print(
+                    "\nERROR ==> Raw texts extracted from the gold standard corpus and the initialized corpus are not the same!"
+                )
                 return None
 
             if initTag not in objects.keys():
@@ -112,21 +138,36 @@ def getObjectDictionary(initializedCorpus, goldStandardCorpus):
 
     return objects
 
+
 class FWObject:
     """
     RDRPOSTaggerV1.1: new implementation scheme
     RDRPOSTaggerV1.2: add suffixes
     """
 
-    def __init__(self, check = False):
-        self.context = [None, None, None, None, None, None, None, None, None, None, None, None, None]
-        if(check == True):
+    def __init__(self, check=False):
+        self.context = [
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        ]
+        if check == True:
             i = 0
-            while (i < 10):
+            while i < 10:
                 self.context[i] = "<W>"
                 self.context[i + 1] = "<T>"
                 i = i + 2
-            self.context[10] = "<SFX>"# suffix
+            self.context[10] = "<SFX>"  # suffix
             self.context[11] = "<SFX>"
             self.context[12] = "<SFX>"
         self.notNoneIds = []
@@ -166,6 +207,7 @@ class FWObject:
             object.context[9] = nextTag2
 
         return object
+
 
 #    def isSatisfied(self, fwObject):
 #        for i in range(13):
