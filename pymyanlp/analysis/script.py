@@ -112,6 +112,7 @@ def fix_medial(text, position: Literal["before", "after"] = "before"):
         return text
 
     dependent_consonant_signs = {
+        0x1031,  # MYANMAR VOWEL SIGN E
         0x103B,  # MYANMAR CONSONANT SIGN MEDIAL YA
         0x103C,  # MYANMAR CONSONANT SIGN MEDIAL RA
     }
