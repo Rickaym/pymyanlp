@@ -1,6 +1,6 @@
 [project]
 name = "pymyanlp"
-version = "0.1.0"
+version = "0.1.1"
 description = "Python utilities for Myanmar language processing"
 readme = "README.md"
 requires-python = ">=3.7"
@@ -35,3 +35,9 @@ include = ["pymyanlp*"]
 
 [tool.setuptools.package-data]
 pymyanlp = ["lib/myword/models/bigram-word.bin", "lib/myword/models/unigram-word.bin", "lib/mypos/models/v3_train1.nopipe.DICT", "lib/mypos/models/v3_train1.nopipe.RDR"]
+
+[dependency-groups]
+dev = [
+    "matplotlib>=3.5.3",
+    "pytest>=7.4.4",
+]
