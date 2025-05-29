@@ -40,4 +40,5 @@ class PartOfSpeech(Enum):
 @wraps(_inner)
 def pos_tag(*args, **kwargs):
     """Part-of-speech tagging."""
-    return _inner(*args, **kwargs)
+    return [(word, PartOfSpeech.from_notation(tag)) for word, tag in _inner(*args, **kwargs)]
+

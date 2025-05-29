@@ -15,6 +15,8 @@ lexicon_path = files(__package__).joinpath("models/v3_train1.nopipe.DICT").as_po
 
 
 def tag_part_of_speech(input_text: str) -> list[tuple[str, str]]:
+    if not input_text:
+        return []
     return [
         (word, tag)
         for word, tag in pSCRDRtagger(

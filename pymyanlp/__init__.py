@@ -1,32 +1,24 @@
-__version__ = "0.1.0"
 __author__ = "Pyae Sone Myo"
 
 # Analysis modules
 from pymyanlp.analysis.sentiment import (
     Polarity,
     SentimentAnalysisResult,
-    ScoreBasedSentimentAnalyzer
-)
-
-from pymyanlp.analysis.keywords import (
-    extract_keywords_tfidf,
-    penalize
+    ScoreBasedSentimentAnalyzer,
 )
 
 from pymyanlp.analysis.grammer import (
     MyanmarParticleType,
     myanmar_particle_map,
-    myanmar_particles
+    myanmar_particles,
 )
 
-from pymyanlp.analysis.script import (
-    is_burmese,
-    get_burmese_script
-)
+from pymyanlp.analysis.spellcheck import spell_checker
 
-from pymyanlp.analysis.spellcheck import (
-    spell_checker
-)
+# Resources modules
+from pymyanlp.resources.keywords import extract_keywords_tfidf, penalize
+
+from pymyanlp.resources.stopword import remove_stop_words, STOPWORDS, STOPWORD_POS
 
 # Library modules
 from pymyanlp.lib.myword import (
@@ -34,38 +26,30 @@ from pymyanlp.lib.myword import (
     WordSegmenter,
     conditional_prob,
     read_dict,
-    segment_text
+    segment_text,
 )
 
-from pymyanlp.lib.mypos import (
-    tag_part_of_speech,
-    NLTK_TAGSET_MAP
-)
+from pymyanlp.lib.mypos import tag_part_of_speech, NLTK_TAGSET_MAP
 
-from pymyanlp.preprocessor.segment import (
+# Text modules
+from pymyanlp.text.segment import (
     segment_word,
     list_available_models,
     set_default_model,
     SEGMENTATION_MODELS,
-    ModelName
+    ModelName,
 )
 
-from pymyanlp.preprocessor.tokenizer import (
-    words_tokenize
-)
+from pymyanlp.text.tokenizer import words_tokenize
 
-from pymyanlp.preprocessor.pos import (
-    PartOfSpeech,
-    pos_tag
-)
+from pymyanlp.text.pos import PartOfSpeech, pos_tag
 
-from pymyanlp.preprocessor.stopword import (
-    remove_stop_words,
-    STOPWORDS,
-    STOPWORD_POS
-)
+from pymyanlp.text.style import BurmeseForm, identify_style
 
-from pymyanlp.preprocessor.tools import (
+# Tool modules
+from pymyanlp.text.script import (
+    is_burmese,
+    get_burmese_script,
     apply_written_suite,
     transliterate_numbers,
     clear_spacing,
@@ -74,13 +58,8 @@ from pymyanlp.preprocessor.tools import (
     contains_burmese,
     NUMBER_MAP,
     PUNCTUATION,
-    myanmar_alphabet,
-    symbolic_words
-)
-
-from pymyanlp.preprocessor.style import (
-    BurmeseForm,
-    identify_style
+    BURMESE_ALPHABET,
+    symbolic_words,
 )
 
 __all__ = [
@@ -96,7 +75,6 @@ __all__ = [
     "spell_checker",
     "is_burmese",
     "get_burmese_script",
-
     # Library
     "ProbDist",
     "WordSegmenter",
@@ -105,7 +83,6 @@ __all__ = [
     "segment_text",
     "tag_part_of_speech",
     "NLTK_TAGSET_MAP",
-
     # Preprocessor
     "segment_word",
     "list_available_models",
@@ -126,7 +103,7 @@ __all__ = [
     "contains_burmese",
     "NUMBER_MAP",
     "PUNCTUATION",
-    "myanmar_alphabet",
+    "BURMESE_ALPHABET",
     "symbolic_words",
     "BurmeseForm",
     "identify_style",

@@ -1,7 +1,8 @@
 import numpy as np
+
 # from sklearn.feature_extraction.text import TfidfVectorizer
-from pymyanlp.preprocessor.tools import apply_written_suite
-from pymyanlp.preprocessor.tokenizer import words_tokenize
+from pymyanlp.text.script import apply_written_suite
+from pymyanlp.text.tokenizer import words_tokenize
 
 
 def extract_keywords_tfidf(

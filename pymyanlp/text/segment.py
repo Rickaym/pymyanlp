@@ -1,5 +1,5 @@
 import importlib.util
-from typing import List, Dict, Any, Callable, Optional, Union, Literal
+from typing import List, Dict, Any, Callable, Optional, Literal
 
 
 # Dictionary of available segmentation models

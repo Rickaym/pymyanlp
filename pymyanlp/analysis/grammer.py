@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 
 class MyanmarParticleType(Enum):
     """Enum representing types of Myanmar particles"""

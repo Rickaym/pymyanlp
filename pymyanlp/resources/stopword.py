@@ -1,4 +1,4 @@
-from pymyanlp.preprocessor.pos import PartOfSpeech
+from pymyanlp.text.pos import PartOfSpeech
 
 STOPWORDS = []
 

@@ -2,8 +2,8 @@ import pandas as pd
 
 from typing import Callable
 from enum import Enum, auto
-from pymyanlp.preprocessor.tokenizer import words_tokenize
-from pymyanlp.preprocessor.tools import apply_written_suite
+from pymyanlp.text.tokenizer import words_tokenize
+from pymyanlp.text.script import apply_written_suite
 from dataclasses import dataclass
 
 
