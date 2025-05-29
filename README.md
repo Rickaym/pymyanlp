@@ -1,117 +1,108 @@
 # PyMyaNLP
 
+A Python library for Myanmar (Burmese) language processing and natural language processing tasks.
+
+မြန်မာဗျည်းအက္ခရာအခြေခံသော ဘာသာစကားများအတွက် NLP အရာ၌ အထွေထွေသုံးစွဲနိုင်ရန်ရည်ရွယ်၍ ရေးသားဖြစ်ခဲ့သည်။
+
 ## Installation
 
 ```bash
 pip install pymyanlp
 ```
 
-# Sentiment Analyzer
+## Quick Start
 
-# Agglutinative Nature
+```python
+import pymyanlp
 
-## TODO
+# Word segmentation
+segments = pymyanlp.segment_word("ရေပုံမှန်သောက်ပါ") # ['ရေ', 'ပုံမှန်', 'သောက်', 'ပါ']
 
-1. Stop word detection and removal
-2. Manually create sentiment lexicon
-3. Write documentation in Burmese
+# Part-of-speech tagging
+tags = pymyanlp.pos_tag("မြန်မာ ဘာသာ") # [('မြန်မာ', <PartOfSpeech.Noun: 'n'>), ('ဘာသာ', <PartOfSpeech.Noun: 'n'>)]
 
-## Sentiment Lexicon
+# Text detection and validation
+pymyanlp.is_burmese("မြန်မာ ဘာသာ")  # True
 
-### Rules
+pymyanlp.contains_burmese("Hello မြန်မာ")  # True
 
-1. No repeated words
-2. Words must root (aka unsegmentable)
-3. or words must be direct pairs of segmented roots (သတ်၊ ဖြတ်)
+pymyanlp.get_burmese_script("မြန်မာ")  # burmese
+pymyanlp.get_burmese_script("တမၟာ")  # mon
+pymyanlp.get_burmese_script("ၡးခွ့မဲၢ်")  # sgaw_karen
+pymyanlp.get_burmese_script("ႁိူဝ်းမိၼ်")  # shan
 
+# Number transliteration
+pymyanlp.transliterate_numbers("2024")  # ၂၀၂၄
 
-# Burmese Phonology
+# Text processing pipeline
+processed = pymyanlp.apply_written_suite("Hello 2024, မြန်မာ!") # Normalized text
+```
 
-The syllable structure of Burmese is C(G)V((V)C), which is to say the onset consists of a consonant optionally followed by a glide, and the rime consists of a monophthong alone, a monophthong with a consonant, or a diphthong with a consonant. The only consonants that can stand in the coda are /ʔ/ and /ɴ/. Some representative words are:
+## Features
 
-- CV မယ် /mɛ̀/ 'miss'
-- CVC မက် /mɛʔ/ 'crave'
-- CGV မြေ /mjè/ 'earth'
-- CGVC မျက် /mjɛʔ/ 'eye'
-- CVVC မောင် /màʊɰ̃/ (term of address for young men)
-- CGVVC မြောင်း /mjáʊɰ̃/ 'ditch'
+| Feature | Description |
+|---------|-------------|
+| Word Segmentation | Multiple models (Viterbi, CRF-based) |
+| POS Tagging | Part-of-speech tagging for Myanmar text |
+| Text Normalization | Clean and standardize text |
+| Transliteration | Convert English  to Myanmar |
+| Script Detection | Identify Burmese text and script variants |
+| Punctuation Handling | Remove or process punctuation |
+| Spacing Normalization | Handle mixed script spacing |
+| Text Style Detection | Identify different Myanmar text styles |
+| Sentiment Analysis* | Score-based sentiment classification |
+| Grammar Analysis* | Myanmar particle and grammar detection |
+| Spell Checking* | Basic spell checking functionality |
 
-A minor syllable has some restrictions:
+*means not yet implemented
 
-- It contains /ə/ as its only vowel
-- It must be an open syllable (no coda consonant)
-- It cannot bear tone
-- It has only a simple (C) onset (no glide after the consonant)
-- It must not be the final syllable of the word
+## Constants and Enums
 
-Some examples of words containing minor syllables:
+```python
+# POS tag enums
+pymyanlp.PartOfSpeech.Noun.value  # "n"
 
-- ခလုတ် /kʰə.loʊʔ/ 'knob/switch'
-- ပလွေ /pə.lwè/ 'flute'
-- သရော် /θə.jɔ̀/ 'mock'
-- ကလက် /kə.lɛʔ/ 'be wanton/be frivolous'
-- ထမင်းရည် /tʰə.mə.jè/ '(cooked)rice-water'
+# Built-in constants
+pymyanlp.NUMBER_MAP  # {'0': '၀', '1': '၁', ...}
+pymyanlp.PUNCTUATION  # ['။', '၊', ',', '.', ...]
+```
 
-# Preprocessing
+## Testing
 
-I have cloned the dependency libraries into the `./lib` folder for ease
-of access and crawling. In the future, we should just take the files
-needed and organize better.
+Run the test suite:
 
-## Tokenization / Word Segmentation
+```bash
+# Run all tests
+pytest tests/
+```
 
-Conditional Random Fields
+## Documentation
 
-## Part of Speech Tagging
+- **API Reference**: See module docstrings for detailed API documentation
+- **Test Examples**: Check `tests/` directory for usage examples
 
-myWord by YeThK is used for POS speech tagging, it provides us the
-annotated corpus and lexicon.
+## Project Structure
 
-In the future we should train a spaCy pipeline using myPOS v3 data but for now we will use an available RDRPOSTagger.
+```
+pymyanlp/
+├── text/           # Text processing modules
+├── analysis/       # Analysis and NLP modules
+├── utils/          # Utility functions
+├── resources/      # Language resources
+└── lib/            # Core algorithms and models
+```
 
-POS tagger fails to identify ရန်ဖြစ်/v properly in most cases.
+## License
 
-Some words may have completely different forms in the two systems, and others will vary in terms of pronunciation, tone, vowel length, etc.
+MIT License - see LICENSE.txt for details.
 
-J Watkins defines the follow different types of Burmese:
+## Contributing
 
-- OB Old Burmese: the language of the 11th-13th century inscriptions
-- WB written Burmese - the orthographical form of the modem language
-- CB colloquial Burmese
-- MB modem Burmese = colloquial Burmese
-- FB formal Burmese
+1. Fork the repository
+2. Create a feature branch
+3. Add tests for new functionality
+4. Run the test suite
+5. Submit a pull request
 
-## Spelling Checker
+For bug reports and feature requests, please use the GitHub issue tracker.
 
-## Stopword Removal
-
-# Use Cases
-
-## Summary Keyword Extraction
-
-### Model: Modified TF-IDF Keyword Ranking
-
-- Tokenize
-- Tag POS
-- Extract Verbs, Adjectives, Nouns and Adverbs
-- Generate TF-IDF score on the widespread corpus
-- Penalize scores
-
-## Sentiment Analysis
-
-### Sentiment Lexicon
-
-Building up the sentiment lexicon is pretty much a guess work.
-
-### Sentiment Word Extraction
-
-Due to the nature of Burmese, non reducing and reducing compound words can be ambiguous in their word separation. This case should be considered.
-
-1. Noun-verb: အကျိုး/n ပျက်စီး/v
-2. Verb-verb: ခိုး/v ယူ/v
-
-This could be avoided with a sufficiently powerful POS tagger so that we are not just looking at the word, we are looking at the part of speech as well.
-
-E.g. ညာမပြောနဲ့ကွာ။ Both ညာ/v (lie) ညာ/n (right) exists.
-
-It might be very useful to have an algorithm that transforms a sentiment word of a certain form, let's say colloquial form, to literary form, where at the simplest level of modifications is removing the consonant pair, လိမ်ညာ => ညာ and use the sentiment lexicon of the same form to match.
